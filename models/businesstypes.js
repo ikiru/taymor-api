@@ -8,8 +8,8 @@
 let Bookshelf = require('./database');
 
 require('./business');
-var BusinessType = Bookshelf.Model.extend({
-  tableName: 'businesstype',
+var BusinessTypes = Bookshelf.Model.extend({
+  tableName: 'businesstypes',
   hasTimestamps: true,
 
   business: function() {
@@ -17,4 +17,4 @@ var BusinessType = Bookshelf.Model.extend({
   }
 });
 
-module.exports = Bookshelf.model('BusinessType', BusinessType);
+module.exports = Bookshelf.model('BusinessTypes', BusinessTypes);

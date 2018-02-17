@@ -7,9 +7,10 @@
 
 let Bookshelf = require('./database');
 
-require('./business');
-const ActiveLevel = Bookshelf.Model.extend({
-  tableName: 'activelevel',
+require('./business')
+
+const ActiveLevels = Bookshelf.Model.extend({
+  tableName: 'activelevels',
   hasTimestamps: true,
 
   business: function() {
@@ -17,4 +18,4 @@ const ActiveLevel = Bookshelf.Model.extend({
   }
 });
 
-module.exports = Bookshelf.model('ActiveLevel', ActiveLevel);
+module.exports = Bookshelf.model('ActiveLevels', ActiveLevels);

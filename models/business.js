@@ -9,7 +9,7 @@ let Bookshelf = require('./database');
 
 require('./activelevel')
 require('./locations')
-require('./invoice')
+require('./invoices')
 require('./businesstype')
 require('./rentallength')
 
@@ -17,8 +17,8 @@ const Business = Bookshelf.Model.extend({
   tableName: 'business',
   hasTimestamps: true,
 
-  activelevel: function() {
-    return this.hasMany('ActiveLevel');
+  activelevels: function() {
+    return this.hasMany('ActiveLevels');
   },
 
   locations: function() {
