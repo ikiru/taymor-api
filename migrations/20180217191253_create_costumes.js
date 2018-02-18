@@ -8,7 +8,7 @@ exports.up = function(knex, Promise) {
     table.increments()
     table.string('name').notNullable()
     table.string('qrcode').notNullable()
-    table.string('description').notNullable()
+    table.text('description').notNullable()
     table.boolean('onlinerental').notNullable()
     table.integer('rentalprice').notNullable()
     table.integer('rentallist_id').references('id').inTable('rentallist')

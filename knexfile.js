@@ -1,10 +1,10 @@
 module.exports = {
   development: {
     client: 'pg',
-    connection: 'betteroff.cxc47tthyp3m.us-east-2.rds.amazonaws.com',
+    connection: 'arn:aws:rds:us-east-2:402370617414:db:betteroff',
     user     : 'betteroffcostumes',
     password : 'Pepper00~~!!',
-    database : 'myapp_test',
+    database : 'taymor_development',
     charset  : 'utf8'
   },
     migrations: {

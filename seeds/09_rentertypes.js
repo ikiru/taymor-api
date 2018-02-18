@@ -5,9 +5,10 @@ exports.seed = function(knex, Promise) {
     .then(function () {
       // Inserts seed entries
       return knex('rentertypes').insert([
-        {id: 1, colName: 'rowValue1'},
-        {id: 2, colName: 'rowValue2'},
-        {id: 3, colName: 'rowValue3'}
+        {id: 1, colName: 'High School'},
+        {id: 2, colName: 'Business'},
+        {id: 3, colName: 'Community Theater'},
+        {id: 4, colName: 'Indivdual'}
       ]);
     });
 };

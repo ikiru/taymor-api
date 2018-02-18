@@ -5,9 +5,9 @@ exports.seed = function(knex, Promise) {
     .then(function () {
       // Inserts seed entries
       return knex('shares').insert([
-        {id: 1, colLocation_id: 'rowValue1',colLocation_id: 'rowValue3'},
-        {id: 2, colLocation_id: 'rowValue2',colLocation_id: 'rowValue2'},
-        {id: 3, colLocation_id: 'rowValue3',colLocation_id: 'rowValue1'}
+        {id: 1, colLocation_id: 1, colLocation_id: 3},
+        {id: 2, colLocation_id: 2, colLocation_id: 2},
+        {id: 3, colLocation_id: 3, colLocation_id: 1}
       ]);
     });
 };

@@ -12,6 +12,7 @@ exports.up = function(knex, Promise) {
     table.string('address').notNullable()
     table.string('city').notNullable()
     table.string('state').notNullable()
+    table.string('zip').notNullable()
     table.string('phone').notNullable()
     table.string('email').notNullable()
     table.string('taxNumber').notNullable()
