@@ -9,7 +9,9 @@
   "author": "jeff winkler",
   "license": "ISC",
   "dependencies": {
+    "body-parser": "^1.18.2",
     "bookshelf": "^0.12.1",
+    "express-graphql": "^0.6.11",
     "knex": "^0.13.0",
     "nodemon": "^1.15.0",
     "pg": "^7.4.1"
