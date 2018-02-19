@@ -1,12 +1,14 @@
 module.exports = {
   development: {
     client: 'pg',
-    connection: 'arn:aws:rds:us-east-2:402370617414:db:betteroff',
-    user     : 'betteroffcostumes',
-    password : 'Pepper00~~!!',
-    database : 'taymor_development',
-    charset  : 'utf8'
-  },
+    connection:{
+      username: 'betteroffcostumes', 
+      password: 'Pepper00~~!!', 
+      database:'taymor_development',
+      host: 'betteroff.cxc47tthyp3m.us-east-2.rds.amazonaws.com',
+      dialect: 'postgres'
+      }
+    },
     migrations: {
       directory: __dirname + '/db/migrations',
     },

@@ -1,6 +1,8 @@
-const express = require('express-graphql')
-const bosyParser = require('body-parser')
+const express = require('express')
+const bodyParser = require('body-parser')
 const port = process.env.Port || 8000
+const knex = require('./knexfile')
+
 const app = express()
 
 app.use(bodyParser.json())
@@ -9,7 +11,7 @@ app.use(bodyParser.urlencoded({ extended: false }))
 app.listen(port, function() {
   console.log('--------------------------------------------------')
   console.log('When you sleep, I can hear you when you scream!!!!')
-  console.log('On port ',port)
+  console.log('On port ', npmport)
   console.log('--------------------------------------------------')
 })
 
@@ -25,8 +27,8 @@ app.listen(port, function() {
 //   }
 // });
 
-var bookshelf = require('bookshelf')(knex);
+// var bookshelf = require('bookshelf')(knex);
 
-var User = bookshelf.Model.extend({
-  tableName: 'users'
-});
+// var User = bookshelf.Model.extend({
+//   tableName: 'users'
+// });
