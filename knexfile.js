@@ -2,10 +2,10 @@ module.exports = {
   development: {
     client: 'pg',
     connection:{
-      username: 'betteroffcostumes', 
+      username: 'Ikiru', 
       password: 'Pepper00~~!!', 
       database:'taymor_development',
-      host: 'betteroff.cxc47tthyp3m.us-east-2.rds.amazonaws.com',
+      host: 'localhost',
       dialect: 'postgres'
       }
     },
