@@ -1,18 +1,24 @@
 module.exports = {
-  development: {
-    client: 'pg',
-    connection:{
-      username: 'Ikiru', 
-      password: 'Pepper00~~!!', 
-      database:'taymor_development',
-      host: 'localhost',
-      dialect: 'postgres'
-      }
+    development: {
+      client: 'pg',
+      connection: 'postgres://localhost:5432/taymor_development',
+      
+
+      migrations: {
+        directory: __dirname + '/db/migrations',
+      },
+      seeds: {
+        directory: __dirname + '/db/seeds',
+      },
     },
-    migrations: {
-      directory: __dirname + '/db/migrations',
-    },
-    seeds: {
-      directory: __dirname + '/db/seeds',
+    production:{
+      client:'pg',
+      connection: process.env.DATABASE_URL,
+      migrations:{
+        directory: __dirname + '/db/migrations',
+      },
+      seeds: {
+        directory: __dirname + '/db/seeds/production',
+      },
     },
   }
