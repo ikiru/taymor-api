@@ -1,8 +1,10 @@
 module.exports = {
     development: {
       client: 'pg',
-      connection: 'postgres://localhost:5432/taymor_development',
-      
+      connection: 'betteroff.cxc47tthyp3m.us-east-2.rds.amazonaws.com',
+      user: 'Ikiru',
+      password: 'Pepper00~~!!',
+      port:5432,
 
       migrations: {
         directory: __dirname + '/db/migrations',
