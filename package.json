@@ -5,6 +5,7 @@
   "main": "server.js",
   "repository": "https://github.com/ikiru/taymor-api.git",
   "scripts": {
+    "start": "node server.js",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "author": "jeff winkler",
@@ -17,7 +18,10 @@
     "express-graphql": "^0.6.12",
     "graphql": "^0.13.1",
     "knex": "^0.13.0",
-    "nodemon": "^1.15.0",
     "pg": "^7.4.1"
+  },
+  "devDependencies": {
+    "babel-core": "^6.26.0",
+    "babel-preset-env": "^1.6.1"
   }
 }

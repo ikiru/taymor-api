@@ -1,26 +1,18 @@
 module.exports = {
-    development: {
-      client: 'pg',
-      connection: 'betteroff.cxc47tthyp3m.us-east-2.rds.amazonaws.com',
-      user: 'Ikiru',
-      password: 'Pepper00~~!!',
-      port:5432,
+  development: {
+    client:'pg',
+      connection: {
+        host : '127.0.0.1',
+        user : 'jeffwinkler',
+        password : '',
+        database : 'taymor_development',
+      },
+    },
 
-      migrations: {
-        directory: __dirname + '/db/migrations',
-      },
-      seeds: {
-        directory: __dirname + '/db/seeds',
-      },
+    migrations: {
+      directory: __dirname + '/db/migrations',
     },
-    production:{
-      client:'pg',
-      connection: process.env.DATABASE_URL,
-      migrations:{
-        directory: __dirname + '/db/migrations',
-      },
-      seeds: {
-        directory: __dirname + '/db/seeds/production',
-      },
+    seeds: {
+      directory: __dirname + '/db/seeds',
     },
-  }
+}
