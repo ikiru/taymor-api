@@ -215,22 +215,29 @@ function SQLite3_DDL(client, tableCompiler, pragma, connection) {
     }, { connection: this.connection });
   }),
 
-  dropColumn: _bluebird2.default.method(function (column) {
+  dropColumn: _bluebird2.default.method(function (columns) {
     var _this2 = this;
 
     return this.client.transaction(function (trx) {
       _this2.trx = trx;
-      return _this2.getColumn(column).bind(_this2).then(_this2.getTableSql).then(function (sql) {
+      return _bluebird2.default.all(columns.map(function (column) {
+        return _this2.getColumn(column);
+      })).bind(_this2).then(_this2.getTableSql).then(function (sql) {
+        var _this3 = this;
+
         var createTable = sql[0];
-        var a = this.client.wrapIdentifier(column);
-        var newSql = this._doReplace(createTable.sql, a, '');
+        var newSql = createTable.sql;
+        columns.forEach(function (column) {
+          var a = _this3.client.wrapIdentifier(column);
+          newSql = _this3._doReplace(newSql, a, '');
+        });
         if (sql === newSql) {
           throw new Error('Unable to find the column to change');
         }
         return _bluebird2.default.bind(this).then(this.createTempTable(createTable)).then(this.copyData).then(this.dropOriginal).then(function () {
           return this.trx.raw(newSql);
         }).then(this.reinsertData(function (row) {
-          return (0, _omit3.default)(row, column);
+          return _omit3.default.apply(undefined, [row].concat(columns));
         })).then(this.dropTempTable);
       });
     }, { connection: this.connection });

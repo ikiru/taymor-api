@@ -128,6 +128,9 @@ function Builder(client) {
     if (!(0, _isUndefined3.default)(this._options)) {
       cloned._options = (0, _clone3.default)(this._options);
     }
+    if (!(0, _isUndefined3.default)(this._queryContext)) {
+      cloned._queryContext = (0, _clone3.default)(this._queryContext);
+    }
 
     return cloned;
   },
@@ -149,41 +152,24 @@ function Builder(client) {
   // With
   // ------
 
-  with: function _with(alias, statement, bindings) {
+  with: function _with(alias, statement) {
     if (typeof alias !== 'string') {
       throw new Error('with() first argument must be a string');
     }
-    if (typeof statement === 'function') {
+    if (typeof statement === 'function' || statement instanceof Builder || statement instanceof _raw2.default) {
       return this.withWrapped(alias, statement);
     }
-    // Allow a raw statement to be passed along to the query.
-    if (statement instanceof _raw2.default && arguments.length >= 2) {
-      return this.withRaw(alias, statement, bindings);
-    }
-    throw new Error('with() second argument must be a function or a raw');
-  },
-
-
-  // Adds a raw `with` clause to the query.
-  withRaw: function withRaw(alias, sql, bindings) {
-    var raw = sql instanceof _raw2.default ? sql : this.client.raw(sql, bindings);
-    this._statements.push({
-      grouping: 'with',
-      type: 'withRaw',
-      alias: alias,
-      value: raw
-    });
-    return this;
+    throw new Error('with() second argument must be a function / QueryBuilder or a raw');
   },
 
 
   // Helper for compiling any advanced `with` queries.
-  withWrapped: function withWrapped(alias, callback) {
+  withWrapped: function withWrapped(alias, query) {
     this._statements.push({
       grouping: 'with',
       type: 'withWrapped',
       alias: alias,
-      value: callback
+      value: query
     });
     return this;
   },
@@ -1106,7 +1092,7 @@ function Builder(client) {
   _aggregate: function _aggregate(method, column, aggregateDistinct) {
     this._statements.push({
       grouping: 'columns',
-      type: 'aggregate',
+      type: column instanceof _raw2.default ? 'aggregateRaw' : 'aggregate',
       method: method,
       value: column,
       aggregateDistinct: aggregateDistinct || false
@@ -1155,6 +1141,7 @@ Builder.prototype.del = Builder.prototype.delete;
 
 // Attach all of the top level promise methods that should be chainable.
 require('../interface')(Builder);
+helpers.addQueryContext(Builder);
 
 exports.default = Builder;
 module.exports = exports['default'];

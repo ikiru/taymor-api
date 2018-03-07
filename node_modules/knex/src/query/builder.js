@@ -53,6 +53,9 @@ assign(Builder.prototype, {
     if (!isUndefined(this._options)) {
       cloned._options = clone(this._options);
     }
+    if (!isUndefined(this._queryContext)) {
+      cloned._queryContext = clone(this._queryContext);
+    }
 
     return cloned;
   },
@@ -71,39 +74,27 @@ assign(Builder.prototype, {
   // With
   // ------
 
-  with(alias, statement, bindings) {
+  with(alias, statement) {
     if(typeof alias !== 'string') {
       throw new Error('with() first argument must be a string');
     }
-    if (typeof statement === 'function') {
+    if (
+      typeof statement === 'function' ||
+      statement instanceof Builder ||
+      statement instanceof Raw
+    ) {
       return this.withWrapped(alias, statement);
     }
-    // Allow a raw statement to be passed along to the query.
-    if (statement instanceof Raw && arguments.length >= 2) {
-      return this.withRaw(alias, statement, bindings);
-    }
-    throw new Error('with() second argument must be a function or a raw');
-  },
-
-  // Adds a raw `with` clause to the query.
-  withRaw(alias, sql, bindings) {
-    const raw = (sql instanceof Raw ? sql : this.client.raw(sql, bindings));
-    this._statements.push({
-      grouping: 'with',
-      type: 'withRaw',
-      alias: alias,
-      value: raw
-    });
-    return this;
+    throw new Error('with() second argument must be a function / QueryBuilder or a raw');
   },
 
   // Helper for compiling any advanced `with` queries.
-  withWrapped(alias, callback) {
+  withWrapped(alias, query) {
     this._statements.push({
       grouping: 'with',
       type: 'withWrapped',
       alias: alias,
-      value: callback
+      value: query
     });
     return this;
   },
@@ -966,7 +957,7 @@ assign(Builder.prototype, {
   _aggregate(method, column, aggregateDistinct) {
     this._statements.push({
       grouping: 'columns',
-      type: 'aggregate',
+      type: column instanceof Raw ? 'aggregateRaw' : 'aggregate',
       method,
       value: column,
       aggregateDistinct: aggregateDistinct || false
@@ -1014,5 +1005,6 @@ Builder.prototype.del = Builder.prototype.delete
 
 // Attach all of the top level promise methods that should be chainable.
 require('../interface')(Builder);
+helpers.addQueryContext(Builder);
 
 export default Builder;

@@ -33,8 +33,19 @@ function SchemaCompiler_MySQL(client, builder) {
 
   // Check whether a table exists on the query.
   hasTable: function hasTable(tableName) {
+    var sql = 'select * from information_schema.tables where table_name = ?';
+    var bindings = [tableName];
+
+    if (this.schema) {
+      sql += ' and table_schema = ?';
+      bindings.push(this.schema);
+    } else {
+      sql += ' and table_schema = database()';
+    }
+
     this.pushQuery({
-      sql: 'show tables like ' + this.formatter.parameter(tableName),
+      sql: sql,
+      bindings: bindings,
       output: function output(resp) {
         return resp.length > 0;
       }

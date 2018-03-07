@@ -96,7 +96,7 @@ function Client_Oracle(config) {
     return new (Function.prototype.bind.apply(_transaction2.default, [null].concat([this], Array.prototype.slice.call(arguments))))();
   },
   formatter: function formatter() {
-    return new _formatter2.default(this);
+    return new (Function.prototype.bind.apply(_formatter2.default, [null].concat([this], Array.prototype.slice.call(arguments))))();
   },
   queryCompiler: function queryCompiler() {
     return new (Function.prototype.bind.apply(_compiler2.default, [null].concat([this], Array.prototype.slice.call(arguments))))();
@@ -151,7 +151,7 @@ function Client_Oracle(config) {
   // Used to explicitly close a connection, called internally by the pool
   // when a connection times out or the pool is shutdown.
   destroyRawConnection: function destroyRawConnection(connection) {
-    connection.close();
+    return _bluebird2.default.fromCallback(connection.close.bind(connection));
   },
 
 
@@ -170,7 +170,6 @@ function Client_Oracle(config) {
     });
   },
   _stream: function _stream(connection, obj, stream, options) {
-    obj.sql = this.positionBindings(obj.sql);
     return new _bluebird2.default(function (resolver, rejecter) {
       stream.on('error', function (err) {
         if (isConnectionError(err)) {
@@ -188,9 +187,6 @@ function Client_Oracle(config) {
   // Runs the query on the specified connection, providing the bindings
   // and any other necessary prep work.
   _query: function _query(connection, obj) {
-
-    // convert ? params into positional bindings (:1)
-    obj.sql = this.positionBindings(obj.sql);
 
     if (!obj.sql) throw new Error('The query is empty');
 

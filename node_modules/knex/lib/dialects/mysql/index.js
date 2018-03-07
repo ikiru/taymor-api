@@ -91,7 +91,7 @@ function Client_MySQL(config) {
 
   _escapeBinding: (0, _string.makeEscape)(),
 
-  wrapIdentifier: function wrapIdentifier(value) {
+  wrapIdentifierImpl: function wrapIdentifierImpl(value) {
     return value !== '*' ? '`' + value.replace(/`/g, '``') + '`' : '*';
   },
 
@@ -103,11 +103,15 @@ function Client_MySQL(config) {
 
     return new _bluebird2.default(function (resolver, rejecter) {
       var connection = _this.driver.createConnection(_this.connectionSettings);
+      connection.on('error', function (err) {
+        connection.__knex__disposed = err;
+      });
       connection.connect(function (err) {
-        if (err) return rejecter(err);
-        connection.on('error', function (err) {
-          connection.__knex__disposed = err;
-        });
+        if (err) {
+          // if connection is rejected, remove listener that was registered above...
+          connection.removeAllListeners();
+          return rejecter(err);
+        }
         resolver(connection);
       });
     });
@@ -117,13 +121,17 @@ function Client_MySQL(config) {
   // Used to explicitly close a connection, called internally by the pool
   // when a connection times out or the pool is shutdown.
   destroyRawConnection: function destroyRawConnection(connection) {
-    connection.removeAllListeners();
-    connection.end(function (err) {
-      if (err) connection.__knex__disposed = err;
+    return _bluebird2.default.fromCallback(connection.end.bind(connection)).catch(function (err) {
+      connection.__knex__disposed = err;
+    }).finally(function () {
+      return connection.removeAllListeners();
     });
   },
   validateConnection: function validateConnection(connection) {
-    return connection.state === 'connected' || connection.state === 'authenticated';
+    if (connection.state === 'connected' || connection.state === 'authenticated') {
+      return true;
+    }
+    return false;
   },
 
 
@@ -131,10 +139,11 @@ function Client_MySQL(config) {
   // and pass that through to the stream we've sent back to the client.
   _stream: function _stream(connection, obj, stream, options) {
     options = options || {};
+    var queryOptions = (0, _assign3.default)({ sql: obj.sql }, obj.options);
     return new _bluebird2.default(function (resolver, rejecter) {
       stream.on('error', rejecter);
       stream.on('end', resolver);
-      connection.query(obj.sql, obj.bindings).stream(options).pipe(stream);
+      connection.query(queryOptions, obj.bindings).stream(options).pipe(stream);
     });
   },
 
@@ -144,12 +153,12 @@ function Client_MySQL(config) {
   _query: function _query(connection, obj) {
     if (!obj || typeof obj === 'string') obj = { sql: obj };
     return new _bluebird2.default(function (resolver, rejecter) {
-      var _obj = obj,
-          sql = _obj.sql;
-
-      if (!sql) return resolver();
-      if (obj.options) sql = (0, _assign3.default)({ sql: sql }, obj.options);
-      connection.query(sql, obj.bindings, function (err, rows, fields) {
+      if (!obj.sql) {
+        resolver();
+        return;
+      }
+      var queryOptions = (0, _assign3.default)({ sql: obj.sql }, obj.options);
+      connection.query(queryOptions, obj.bindings, function (err, rows, fields) {
         if (err) return rejecter(err);
         obj.response = [rows, fields];
         resolver(obj);

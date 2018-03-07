@@ -54,6 +54,11 @@ function ColumnCompiler_PG() {
 
 
   double: 'double precision',
+  decimal: function decimal(precision, scale) {
+    if (precision === null) return 'decimal';
+    return 'decimal(' + this._num(precision, 8) + ', ' + this._num(scale, 2) + ')';
+  },
+
   floating: 'real',
   increments: 'serial primary key',
   json: function json(jsonb) {
@@ -78,8 +83,10 @@ function ColumnCompiler_PG() {
   // Modifiers:
   // ------
   comment: function comment(_comment) {
+    var columnName = this.args[0] || this.defaults('columnName');
+
     this.pushAdditional(function () {
-      this.pushQuery('comment on column ' + this.tableCompiler.tableName() + '.' + this.formatter.wrap(this.args[0]) + " is " + (_comment ? '\'' + _comment + '\'' : 'NULL'));
+      this.pushQuery('comment on column ' + this.tableCompiler.tableName() + '.' + this.formatter.wrap(columnName) + " is " + (_comment ? '\'' + _comment + '\'' : 'NULL'));
     }, _comment);
   }
 });

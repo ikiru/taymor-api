@@ -110,6 +110,8 @@ var specialMethods = {
   });
 });
 
+helpers.addQueryContext(TableBuilder);
+
 // Each of the column types that we can add, we create a new ColumnBuilder
 // instance and push it onto the statements array.
 var columnTypes = [
@@ -157,6 +159,9 @@ TableBuilder.prototype.timestamps = function timestamps() {
 // Set the comment value for a table, they're only allowed to be called
 // once per table.
 TableBuilder.prototype.comment = function (value) {
+  if (typeof value !== 'string') {
+    throw new TypeError('Table comment must be string');
+  }
   this._single.comment = value;
 };
 

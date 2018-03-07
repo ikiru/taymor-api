@@ -68,6 +68,10 @@ function ColumnCompiler_Oracle() {
     // if (!precision) return 'number'; // TODO: Check If default is ok
     return 'number(' + this._num(precision, 8) + ', ' + this._num(scale, 2) + ')';
   },
+  decimal: function decimal(precision, scale) {
+    if (precision === null) return 'decimal';
+    return 'decimal(' + this._num(precision, 8) + ', ' + this._num(scale, 2) + ')';
+  },
   integer: function integer(length) {
     return length ? 'number(' + this._num(length, 11) + ')' : 'integer';
   },
@@ -124,8 +128,10 @@ function ColumnCompiler_Oracle() {
   // ------
 
   comment: function comment(_comment) {
+    var columnName = this.args[0] || this.defaults('columnName');
+
     this.pushAdditional(function () {
-      this.pushQuery('comment on column ' + this.tableCompiler.tableName() + '.' + this.formatter.wrap(this.args[0]) + " is '" + (_comment || '') + "'");
+      this.pushQuery('comment on column ' + this.tableCompiler.tableName() + '.' + this.formatter.wrap(columnName) + " is '" + (_comment || '') + "'");
     }, _comment);
   },
   checkIn: function checkIn(value) {

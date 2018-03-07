@@ -2,10 +2,6 @@
 
 exports.__esModule = true;
 
-var _noop2 = require('lodash/noop');
-
-var _noop3 = _interopRequireDefault(_noop2);
-
 var _isArray2 = require('lodash/isArray');
 
 var _isArray3 = _interopRequireDefault(_isArray2);
@@ -103,7 +99,10 @@ function Runner(client, builder) {
 
     var runner = this;
     var stream = new PassThrough({ objectMode: true });
+
+    var hasConnection = false;
     var promise = _bluebird2.default.using(this.ensureConnection(), function (connection) {
+      hasConnection = true;
       runner.connection = connection;
       var sql = runner.builder.toSQL();
       var err = new Error('The stream may only be used with a single query statement.');
@@ -122,9 +121,13 @@ function Runner(client, builder) {
       return promise;
     }
 
-    // This promise is unreachable since no handler was given, so noop any
-    // exceptions. Errors should be handled in the stream's 'error' event.
-    promise.catch(_noop3.default);
+    // Emit errors on the stream if the error occurred before a connection
+    // could be acquired.
+    // If the connection was acquired, assume the error occured in the client
+    // code and has already been emitted on the stream. Don't emit it twice.
+    promise.catch(function (err) {
+      if (!hasConnection) stream.emit('error', err);
+    });
     return stream;
   },
 
@@ -151,9 +154,14 @@ function Runner(client, builder) {
 
     return queryPromise.then(function (resp) {
       var processedResponse = _this.client.processResponse(resp, runner);
-      _this.builder.emit('query-response', processedResponse, (0, _assign3.default)({ __knexUid: _this.connection.__knexUid }, obj), _this.builder);
-      _this.client.emit('query-response', processedResponse, (0, _assign3.default)({ __knexUid: _this.connection.__knexUid }, obj), _this.builder);
-      return processedResponse;
+      var queryContext = _this.builder.queryContext();
+      var postProcessedResponse = _this.client.postProcessResponse(processedResponse, queryContext);
+
+      _this.builder.emit('query-response', postProcessedResponse, (0, _assign3.default)({ __knexUid: _this.connection.__knexUid }, obj), _this.builder);
+
+      _this.client.emit('query-response', postProcessedResponse, (0, _assign3.default)({ __knexUid: _this.connection.__knexUid }, obj), _this.builder);
+
+      return postProcessedResponse;
     }).catch(_bluebird2.default.TimeoutError, function (error) {
       var timeout = obj.timeout,
           sql = obj.sql,
@@ -164,10 +172,21 @@ function Runner(client, builder) {
       if (obj.cancelOnTimeout) {
         cancelQuery = _this.client.cancelQuery(_this.connection);
       } else {
+        // If we don't cancel the query, we need to mark the connection as disposed so that
+        // it gets destroyed by the pool and is never used again. If we don't do this and
+        // return the connection to the pool, it will be useless until the current operation
+        // that timed out, finally finishes.
+        _this.connection.__knex__disposed = error;
         cancelQuery = _bluebird2.default.resolve();
       }
 
       return cancelQuery.catch(function (cancelError) {
+        // If the cancellation failed, we need to mark the connection as disposed so that
+        // it gets destroyed by the pool and is never used again. If we don't do this and
+        // return the connection to the pool, it will be useless until the current operation
+        // that timed out, finally finishes.
+        _this.connection.__knex__disposed = error;
+
         // cancellation failed
         throw (0, _assign3.default)(cancelError, {
           message: 'After query timeout of ' + timeout + 'ms exceeded, cancelling of query failed.',
@@ -202,17 +221,15 @@ function Runner(client, builder) {
   ensureConnection: function ensureConnection() {
     var _this2 = this;
 
-    return _bluebird2.default.try(function () {
-      return _this2.connection || new _bluebird2.default(function (resolver, rejecter) {
-        // need to return promise or null from handler to prevent warning from bluebird
-        return _this2.client.acquireConnection().then(resolver).catch(_bluebird2.default.TimeoutError, function (error) {
-          if (_this2.builder) {
-            error.sql = _this2.builder.sql;
-            error.bindings = _this2.builder.bindings;
-          }
-          throw error;
-        }).catch(rejecter);
-      });
+    if (this.connection) {
+      return _bluebird2.default.resolve(this.connection);
+    }
+    return this.client.acquireConnection().catch(_bluebird2.default.TimeoutError, function (error) {
+      if (_this2.builder) {
+        error.sql = _this2.builder.sql;
+        error.bindings = _this2.builder.bindings;
+      }
+      throw error;
     }).disposer(function () {
       // need to return promise or null from handler to prevent warning from bluebird
       return _this2.client.releaseConnection(_this2.connection);

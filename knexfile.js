@@ -2,7 +2,7 @@ module.exports = {
     development: {
       client:'pg',
       connection: {
-        host: 'betteroff.cxc47tthyp3m.us-east-2.rds.amazonaws.com',
+        hostname: 'betteroff.cxc47tthyp3m.us-east-2.rds.amazonaws.com',
         database:'taymor_development',
         port: '5432',
         username: 'Ikiru',

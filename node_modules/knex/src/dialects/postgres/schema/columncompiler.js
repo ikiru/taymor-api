@@ -35,6 +35,10 @@ assign(ColumnCompiler_PG.prototype, {
   },
 
   double: 'double precision',
+  decimal(precision, scale) {
+    if (precision === null) return 'decimal';
+    return `decimal(${this._num(precision, 8)}, ${this._num(scale, 2)})`;
+  },
   floating: 'real',
   increments: 'serial primary key',
   json(jsonb) {
@@ -57,9 +61,11 @@ assign(ColumnCompiler_PG.prototype, {
   // Modifiers:
   // ------
   comment(comment) {
+    const columnName = this.args[0] || this.defaults('columnName');
+
     this.pushAdditional(function() {
       this.pushQuery(`comment on column ${this.tableCompiler.tableName()}.` +
-        this.formatter.wrap(this.args[0]) + " is " + (comment ? `'${comment}'` : 'NULL'));
+        this.formatter.wrap(columnName) + " is " + (comment ? `'${comment}'` : 'NULL'));
     }, comment);
   }
 

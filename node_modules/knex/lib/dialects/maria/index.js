@@ -69,13 +69,19 @@ function Client_MariaSQL(config) {
       var connection = new _this.driver();
       connection.connect((0, _assign3.default)({ metadata: true }, _this.connectionSettings));
       connection.on('ready', function () {
-        connection.removeAllListeners('error');
         resolver(connection);
-      }).on('error', rejecter);
+      }).on('error', function (err) {
+        connection.__knex__disposed = err;
+        rejecter(err);
+      });
     });
   },
   validateConnection: function validateConnection(connection) {
-    return connection.connected === true;
+    if (connection.connected === true) {
+      return true;
+    }
+
+    return false;
   },
 
 
@@ -83,7 +89,14 @@ function Client_MariaSQL(config) {
   // when a connection times out or the pool is shutdown.
   destroyRawConnection: function destroyRawConnection(connection) {
     connection.removeAllListeners();
+    var closed = _bluebird2.default.resolve();
+    if (connection.connected || connection.connecting) {
+      closed = new _bluebird2.default(function (resolve) {
+        connection.once('close', resolve);
+      });
+    }
     connection.end();
+    return closed;
   },
 
 

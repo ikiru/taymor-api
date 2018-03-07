@@ -25,7 +25,7 @@ assign(TableCompiler_MSSQL.prototype, {
     const sql = createStatement + this.tableName() + (this._formatting ? ' (\n    ' : ' (') + columns.sql.join(this._formatting ? ',\n    ' : ', ') + ')';
 
     if (this.single.comment) {
-      const comment = (this.single.comment || '');
+      const {comment} = this.single;
       if (comment.length > 60) helpers.warn('The max length for a table comment is 60 characters');
     }
 
@@ -74,7 +74,7 @@ assign(TableCompiler_MSSQL.prototype, {
   },
 
   dropFKRefs (runner, refs) {
-    const formatter = this.client.formatter();
+    const formatter = this.client.formatter(this.tableBuilder);
     return Promise.all(refs.map(function (ref) {
       const constraintName = formatter.wrap(ref.CONSTRAINT_NAME);
       const tableName = formatter.wrap(ref.TABLE_NAME);
@@ -84,7 +84,7 @@ assign(TableCompiler_MSSQL.prototype, {
     }));
   },
   createFKRefs (runner, refs) {
-    const formatter = this.client.formatter();
+    const formatter = this.client.formatter(this.tableBuilder);
 
     return Promise.all(refs.map(function (ref) {
       const tableName = formatter.wrap(ref.TABLE_NAME);
