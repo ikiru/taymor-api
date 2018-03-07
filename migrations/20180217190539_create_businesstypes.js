@@ -1,10 +1,10 @@
 /*
-  
+
 
   Jeff Winkler  02/17/2018
 */
 exports.up = function(knex, Promise) {
-  return knex.schema.createTable('businesstype', function(table){
+  return knex.schema.createTable('businesstypes', function(table){
     table.increments()
     table.string('name').notNullable()
     table.integer('business_id').references('id').inTable('business')
@@ -14,5 +14,5 @@ exports.up = function(knex, Promise) {
 };
 
 exports.down = function(knex, Promise) {
-  
+
 };
