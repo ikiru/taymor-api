@@ -21,6 +21,7 @@
     "react-apollo": "^2.1.0-rc.1"
   },
   "devDependencies": {
+    "@playlyfe/gql": "^2.6.0",
     "babel-core": "^6.26.0",
     "babel-preset-env": "^1.6.1"
   }
