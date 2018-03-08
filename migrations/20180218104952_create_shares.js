@@ -1,5 +1,6 @@
 /*
   this table refers to when a location wishes to share costumes inventory with another location
+  many to many self join
 
   Jeff Winkler  02/18/2018
 */

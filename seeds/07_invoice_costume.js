@@ -1,7 +1,7 @@
 
 exports.seed = function(knex, Promise) {
   // Deletes ALL existing entries
-  return knex('rentallist').del()
+  return knex('invoice_costumes').del()
     .then(function () {
       // Inserts seed entries
       return knex('table_name').insert([

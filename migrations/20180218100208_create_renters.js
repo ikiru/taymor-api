@@ -1,5 +1,5 @@
 /*
-  
+
 
   Jeff Winkler  02/18/2018
 */
@@ -17,6 +17,7 @@ exports.up = function(knex, Promise) {
     table.string('email').notNullable()
     table.string('taxNumber').notNullable()
     table.integer('invoices_id').references('id').inTable('invoices')
+    table.integer('rentertypes_id').references('id').inTable('rentertypes')
     table.timestamp('created_at').defaultTo(knex.fn.now())
     table.timestamp('updated_at').defaultTo(knex.fn.now())
   })

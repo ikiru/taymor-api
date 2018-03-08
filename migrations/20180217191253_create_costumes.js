@@ -1,5 +1,5 @@
 /*
-  
+
 
   Jeff Winkler  02/17/2018
 */
@@ -11,8 +11,13 @@ exports.up = function(knex, Promise) {
     table.text('description').notNullable()
     table.boolean('onlinerental').notNullable()
     table.integer('rentalprice').notNullable()
-    table.integer('rentallist_id').references('id').inTable('rentallist')
+    table.integer('primarycolors_id').references('id').inTable('colors')
+    table.integer('secondarycolors_id').references('id').inTable('colors')
     table.integer('business_id').references('id').inTable('business')
+    table.integer('keywords_id').references('id').inTable('keywords')
+    table.integer('shows_id').references('id').inTable('shows')
+    table.integer('sizes_id').references('id').inTable('sizes')
+    table.integer('timeperiods_id').references('id').inTable('timeperiods')
     table.timestamp('created_at').defaultTo(knex.fn.now())
     table.timestamp('updated_at').defaultTo(knex.fn.now())
   })

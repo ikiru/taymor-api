@@ -6,9 +6,7 @@
 exports.up = function(knex, Promise) {
   return knex.schema.createTable('rentallengths', function(table){
     table.increments()
-    table.string('name').notNullable()
     table.integer('days').notNullable()
-    table.integer('locations_id').references('id').inTable('locations')
     table.timestamp('created_at').defaultTo(knex.fn.now())
     table.timestamp('updated_at').defaultTo(knex.fn.now())
   })

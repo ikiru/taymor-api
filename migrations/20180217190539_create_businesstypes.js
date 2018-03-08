@@ -7,7 +7,6 @@ exports.up = function(knex, Promise) {
   return knex.schema.createTable('businesstypes', function(table){
     table.increments()
     table.string('name').notNullable()
-    table.integer('business_id').references('id').inTable('business')
     table.timestamp('created_at').defaultTo(knex.fn.now())
     table.timestamp('updated_at').defaultTo(knex.fn.now())
   })

@@ -1,5 +1,5 @@
 /*
-  
+
 
   Jeff Winkler  02/16/2018
 */
@@ -7,7 +7,7 @@
 
 let Bookshelf = require('./database');
 
-require('./rentallists')
+require('./invoice_costumes')
 require('./business')
 require('./colors')
 require('./images')
@@ -20,8 +20,8 @@ var Costumes = Bookshelf.Model.extend({
   tableName: 'costumes',
   hasTimestamps: true,
 
-  rentalLists: function() {
-    return this.belongsTo('RentalLists');
+  invoice_costumes: function() {
+    return this.belongsTo('Invoice_Costumes');
   },
 
   business: function() {

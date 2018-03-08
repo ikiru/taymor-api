@@ -1,5 +1,5 @@
 /*
-  
+
 
   Jeff Winkler  02/17/2018
 */
@@ -11,8 +11,8 @@ let Bookshelf = require('./database')
 require('./invoices')
 require('./costumes')
 
-const RentalLists = Bookshelf.Model.extend({
-  tableName: 'RentalLists',
+const Invoice_Costumes = Bookshelf.Model.extend({
+  tableName: 'Invoice_Costumes',
   hasTimestamps: true,
 
   invoices: function() {
@@ -25,4 +25,4 @@ const RentalLists = Bookshelf.Model.extend({
 
 });
 
-module.exports = Bookshelf.model('RentalLists', RentalLists)
+module.exports = Bookshelf.model('Invoice_Costumes',Invoice_Costumes)

@@ -8,7 +8,7 @@ exports.up = function(knex, Promise) {
   return knex.schema.createTable('business', function(table){
     table.increments()
     table.string('name').notNullable()
-    table.integer(invoice_id).references('id').inTable('invoices')
+    table.integer('businesstype_id').references('id').inTable('businesstype')
     table.timestamp('created_at').defaultTo(knex.fn.now())
     table.timestamp('updated_at').defaultTo(knex.fn.now())
   })

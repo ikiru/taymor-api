@@ -9,7 +9,7 @@
 let Bookshelf = require('./database');
 
 require('./business')
-require('./rentallist')
+require('./invoice_costumes')
 
 const Invoices = Bookshelf.Model.extend({
   tableName: 'invoices',
@@ -19,8 +19,8 @@ const Invoices = Bookshelf.Model.extend({
     return this.belongsTo('Business');
   },
 
-  rentallist: function() {
-    return this.belongsTo('RentalList');
+  invoice_costumes: function() {
+    return this.belongsTo('Invoice_Costumes');
   }
 
 });

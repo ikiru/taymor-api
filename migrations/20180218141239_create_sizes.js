@@ -1,5 +1,5 @@
 /*
-  
+
 
   Jeff Winkler  02/18/2018
 */
@@ -8,7 +8,6 @@ exports.up = function(knex, Promise) {
     table.increments()
     table.string('sex').notNullable()
     table.string('size').notNullable()
-    table.integer('costume_id').references('id').inTable('costume')
     table.timestamp('created_at').defaultTo(knex.fn.now())
     table.timestamp('updated_at').defaultTo(knex.fn.now())
   })

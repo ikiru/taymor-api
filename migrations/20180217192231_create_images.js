@@ -1,5 +1,5 @@
 /*
-  
+
 
   Jeff Winkler  02/17/2018
 */
@@ -14,5 +14,5 @@ exports.up = function(knex, Promise) {
 };
 
 exports.down = function(knex, Promise) {
-  
+
 };
