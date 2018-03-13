@@ -895,7 +895,7 @@ const TimePeriods = new GraphQLObjectType ({
         resolve: function(source, args, context, info) {
           return source.id;
         },
-      name: {
+      names: {
         name: '',
         description: '',
         type: GraphQLString,
@@ -937,4 +937,27 @@ const TransactionTypes = new GraphQLObjectType ({
       }
     }
   }
+})
+
+const CostumeStatus = new GraphQLObjectType ({
+  name: 'CostumeStatus',
+  description: '',
+  fields: {
+    id: {
+      name: '',
+      description: '',
+      type: GraphQLInt,
+      resolve: function(source, args, context, info) {
+        return source.id;
+      },
+    status: {
+      name: '',
+      description: '',
+      type: GraphQLString,
+      resolve: function(source, args, context, info) {
+        return source.name;
+      }
+    }
+  }
+}
 })
