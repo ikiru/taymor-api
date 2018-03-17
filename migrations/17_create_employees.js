@@ -9,7 +9,6 @@ exports.up = function(knex, Promise) {
     table.string('firstname').notNullable()
     table.string('lastname').notNullable()
     table.integer('locations_id').references('id').inTable('locations')
-    table.integer('employees_id').references('id').inTable('employees')
     table.integer('securitylevels_id').references('id').inTable('securitylevels')
     table.timestamp('created_at').defaultTo(knex.fn.now())
     table.timestamp('updated_at').defaultTo(knex.fn.now())

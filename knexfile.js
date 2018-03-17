@@ -2,18 +2,15 @@ module.exports = {
     development: {
       client:'pg',
       connection: {
-        hostname: 'betteroff.cxc47tthyp3m.us-east-2.rds.amazonaws.com',
+        host: 'betteroff.cxc47tthyp3m.us-east-2.rds.amazonaws.com',
         database:'taymor_development',
         port: '5432',
-        username: 'Ikiru',
+        user: 'Ikiru',
         password: 'Pepper00~~!!',
-        reconnect:'true',
-        data_source_provider: 'rds',
-        type: 'postgres',
       },
 
       migrations: {
-        directory: __dirname + '/db/migrations',
+        directory: __dirname + '/migrations',
       },
       seeds: {
         directory: __dirname + '/db/seeds',
