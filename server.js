@@ -11,6 +11,10 @@ const port = process.env.Port || 8000;
 
 const app = express();
 
+console.log('-----------------------------------')
+console.log('here')
+console.log('-----------------------------------')
+
 app.use('/graphql', graphqlHTTP({
   schema,
   graphiql: dev,
