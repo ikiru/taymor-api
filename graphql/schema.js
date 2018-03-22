@@ -3,7 +3,8 @@
 
   Jeff Winkler  03/06/2018
 */
-
+const sql = require("pg");
+const { cpool } = require("../db");
 
 const graphql = require('graphql')
 const {
@@ -16,28 +17,28 @@ const {
   GraphQLList
 } = require("graphql");
 
-const ActiveLevel = new GraphQLObjectType ({
-    name: 'Active level',
-    description: 'Active Level of an business',
-    fields: {
-      id: {
-        name: 'Identifier',
-        description: 'Active level identifier',
-        type: GraphQLInt,
-        resolve: function(source, args, context, info) {
-          return source.id;
-        }
-      },
-      name: {
-        name: 'Business activity level',
-        description: 'Determines if the business is still active or has left our service',
-        type: GraphQLString,
-        resolve: function(source, args, context, info) {
-          return source.name;
-      }
-    }
-  }
-})
+// const ActiveLevel = new GraphQLObjectType ({
+  //   name: 'Active level',
+  //   description: 'Active Level of an business',
+  //   fields: {
+  //     id: {
+  //       name: 'Identifier',
+  //       description: 'Active level identifier',
+  //       type: GraphQLInt,
+  //       resolve: function(source, args, context, info) {
+  //         return source.id;
+  //       }
+  //     },
+  //     name: {
+  //       name: 'Business activity level',
+  //       description: 'Determines if the business is still active or has left our service',
+  //       type: GraphQLString,
+  //       resolve: function(source, args, context, info) {
+  //         return source.name;
+  //     }
+  //   }
+  // }
+// })
 
 // const Business = new GraphQLObjectType ({
 //           name: 'Business',
@@ -94,28 +95,28 @@ const ActiveLevel = new GraphQLObjectType ({
 //   }
 // })
 
-// const Colors = new GraphQLObjectType ({
-//         name: 'Colors',
-//         description: 'tThe primary and seconday color of the costume',
-//         fields: {
-//           id: {
-//             name: 'Identifier for the color',
-//             description: 'id number for the color',
-//             type: GraphQLInt,
-//             resolve: function(source, args, context, info) {
-//               return source.id;
-//           },
-//           name: {
-//             name: 'Name of the color',
-//             description: 'Name of the primary and secondary color for the costmes',
-//             type: GraphQLString,
-//             resolve: function(source, args, context, info) {
-//               return source.name;
-//           }
-//         }
-//       }
-//     }
-//   })
+export const Colors = new GraphQLObjectType ({
+        name: 'Colors',
+        description: 'tThe primary and seconday color of the costume',
+        fields: {
+          id: {
+            name: 'Identifier for the color',
+            description: 'id number for the color',
+            type: GraphQLInt,
+            resolve: function(source, args, context, info) {
+              return source.id;
+          },
+          name: {
+            name: 'Name of the color',
+            description: 'Name of the primary and secondary color for the costmes',
+            type: GraphQLString,
+            resolve: function(source, args, context, info) {
+              return source.name;
+          }
+        }
+      }
+    }
+  })
 
 // const Costumes = new GraphQLObjectType ({
 //                           name: 'Costumes',

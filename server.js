@@ -1,6 +1,4 @@
 const dev = process.env.NODE_ENV === 'development';
-const config = require('./knexfile.js');
-const knex = require('./db/knex');
 
 const express = require('express');
 const bodyParser = require('body-parser');
