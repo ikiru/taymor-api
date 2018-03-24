@@ -1,7 +1,10 @@
-const dev = process.env.NODE_ENV === 'development';
+
 
 const express = require('express');
 const bodyParser = require('body-parser');
+const NodeCache = require("node-cache");
+
+
 const graphqlHTTP = require('express-graphql');
 const schema = require('./graphql/schema');
 

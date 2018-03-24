@@ -17,6 +17,28 @@ const {
   GraphQLList
 } = require("graphql");
 
+export const Colors = new GraphQLObjectType({
+  name: 'Colors',
+  description: 'The primary and seconday color of the costume',
+  fields: {
+    id: {
+      name: 'Identifier for the color',
+      description: 'id number for the color',
+      type: GraphQLInt,
+      resolve: function (source, args, context, info) {
+        return source.id;
+      }
+    },
+    name: {
+      name: 'Name of the color',
+      description: 'Name of the primary and secondary color for the costmes',
+      type: GraphQLString,
+      resolve: function (source, args, context, info) {
+        return source.name;
+      }
+    }
+  }
+}),
 // const ActiveLevel = new GraphQLObjectType ({
   //   name: 'Active level',
   //   description: 'Active Level of an business',
@@ -95,28 +117,7 @@ const {
 //   }
 // })
 
-export const Colors = new GraphQLObjectType ({
-        name: 'Colors',
-        description: 'tThe primary and seconday color of the costume',
-        fields: {
-          id: {
-            name: 'Identifier for the color',
-            description: 'id number for the color',
-            type: GraphQLInt,
-            resolve: function(source, args, context, info) {
-              return source.id;
-          },
-          name: {
-            name: 'Name of the color',
-            description: 'Name of the primary and secondary color for the costmes',
-            type: GraphQLString,
-            resolve: function(source, args, context, info) {
-              return source.name;
-          }
-        }
-      }
-    }
-  })
+
 
 // const Costumes = new GraphQLObjectType ({
 //                           name: 'Costumes',
