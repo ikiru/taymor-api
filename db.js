@@ -21,7 +21,7 @@ const dbDevConfig = {
 
 // export const cpool = new mssql.connect(dbProdConfig)
 // export const cpool = new mssql.connect(dbDevConfig)
-export const cpool = process.env.NODE_ENV == 'dev' ? new pg.connect(dbDevConfig) : new pg.connect(dbProdConfig)
+// export const cpool = process.env.NODE_ENV == 'dev' ? new pg.connect(dbDevConfig) : new pg.connect(dbProdConfig)
 
 // export async function token(authCode, token) {
 //   const result = await cpool

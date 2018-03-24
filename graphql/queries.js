@@ -8,11 +8,11 @@ const { Colors } = require("./schema.js");
 
 const QueryRoot = new GraphQLObjectType({
 name: "Queries",
-descrition: "All the queries for the schema",
+description: "All the queries for the schema",
 fields: {
   Colors: {
     name: 'color',
-    type: new GraphQLString,
+    type: new GraphQLList(color),
     description: "Base Colors for the costumes",
     },
     resolve: function(source, args, context, info) {

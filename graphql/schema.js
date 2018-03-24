@@ -38,7 +38,7 @@ export const Colors = new GraphQLObjectType({
       }
     }
   }
-}),
+})
 // const ActiveLevel = new GraphQLObjectType ({
   //   name: 'Active level',
   //   description: 'Active Level of an business',
@@ -962,4 +962,4 @@ export const Colors = new GraphQLObjectType({
 //     }
 //   }
 // }
-// })
+// }
