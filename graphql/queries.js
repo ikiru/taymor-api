@@ -10,7 +10,7 @@ const QueryRoot = new GraphQLObjectType({
 name: "Queries",
 description: "All the queries for the schema",
 fields: {
-  Colors: {
+  colors: {
     name: 'color',
     type: new GraphQLList(color),
     description: "Base Colors for the costumes",
