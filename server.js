@@ -15,15 +15,15 @@ const port = process.env.Port || 8000;
 
 const cache = new NodeCache();
 const app = express();
-console.log('-----------------------------------')
-console.log('here')
-console.log('-----------------------------------')
+
 const schema = new GraphQLSchema({
   // types: [],
   query: QueryRoot,
-  mutation: MutationRoot
+  // mutation: MutationRoot
 });
-
+console.log('-----------------------------------')
+console.log('here')
+console.log('-----------------------------------')
 
 app.use('/graphql', graphqlHTTP({
   schema,

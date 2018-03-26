@@ -11,13 +11,15 @@ name: "Queries",
 description: "All the queries for the schema",
 fields: {
   colors: {
-    name: 'color',
-    type: new GraphQLList(color),
+    name: 'Colors',
+    type: new GraphQLList(Colors),
     description: "Base Colors for the costumes",
     },
     resolve: function(source, args, context, info) {
       return cpool.then(pool => {
-        return pool.request().input('color', args.id).execute('')
+        return pool.request()
+        .input('color',sql.VarChar(30),args.id).execute('')
+        .query('colors_post')
       }).then(result => {
         return result.recordsets[0]
       }).catch(err => {
@@ -27,3 +29,5 @@ fields: {
   },
 
 })
+
+module.exports = QueryRoot;
