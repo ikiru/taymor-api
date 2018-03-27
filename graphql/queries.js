@@ -18,7 +18,8 @@ fields: {
     resolve: function(source, args, context, info) {
       return cpool.then(pool => {
         return pool.request()
-        .input('color',sql.VarChar(30),args.id).execute('')
+        // .input('color',sql.VarChar(30),args.id)
+        .execute('')
         .query('colors_post')
       }).then(result => {
         return result.recordsets[0]
