@@ -32,8 +32,7 @@ const MutationRoot = new GraphQLObjectType({
       args: {
         name: {
           name: 'Name of the color',
-          description: 'This is part of the admin dashboard so that the admin can quickly edit new color' +
-              's',
+          description: 'This is part of the admin dashboard so that the admin can quickly edit new color',
           type: GraphQLString
         }
       },
