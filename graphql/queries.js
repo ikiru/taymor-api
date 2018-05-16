@@ -1,4 +1,4 @@
-const pg = require("pg");
+const mysql = require("mysql");
 const {cpool} = require("../db");
 
 const {GraphQLObjectType, GraphQLList, GraphQLInt, GraphQLString} = require("graphql");

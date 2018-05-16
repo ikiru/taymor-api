@@ -1,13 +1,10 @@
 {
-  "name": "taymor-api",
-  "version": "1.0.0",
-  "description": "server for BetterOff Costumes with graphQl",
-  "main": "server.js",
-  "repository": "https://github.com/ikiru/taymor-api.git",
+  "name": "react-api",
+  "version": "0.0.0",
+  "private": true,
   "scripts": {
     "babel-node": "babel-node --presets=latest",
     "start": "cross-env NODE_ENV=dev nodemon --exec npm run babel-node -- server.js",
-    "test": "echo \"Error: no test specified\" && exit 1",
     "start-min": "babel-node --presets es2017 server.js",
     "build": "babel . -d dist"
   },
@@ -17,24 +14,28 @@
       "es2017"
     ]
   },
-  "author": "jeff winkler",
-  "license": "ISC",
   "dependencies": {
+    "amqplib": "^0.5.2",
+    "axios": "^0.18.0",
     "body-parser": "^1.18.2",
     "express": "^4.16.3",
     "express-graphql": "^0.6.11",
     "graphql": "^0.11.0",
     "graphql-tools": "^2.23.1",
     "moment": "^2.20.1",
+    "mssql": "^4.1.0",
+    "mysql": "^2.15.0",
     "node": "9.5.0",
     "node-cache": "^4.2.0",
-    "pg": "^7.4.1",
+    "nodemon": "^1.17.2",
     "request": "^2.85.0",
     "request-promise": "^4.2.2",
-    "request-promise-native": "^1.0.5"
+    "request-promise-native": "^1.0.5",
+    "strong-soap": "^1.6.1"
   },
   "devDependencies": {
     "babel-cli": "^6.26.0",
+    "babel-plugin-transform-object-rest-spread": "^6.26.0",
     "babel-preset-env": "^1.6.1",
     "babel-preset-es2017": "^6.24.1",
     "babel-preset-latest": "^6.24.1",

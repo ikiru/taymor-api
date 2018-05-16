@@ -1,45 +1,83 @@
+import express from "express";
+import bodyParser from "body-parser";
+import graphqlHTTP from "express-graphql";
 
+import schema from "./graphql/schemas"
 
-const express = require('express');
-const bodyParser = require('body-parser');
-const NodeCache = require("node-cache");
+var app = express();
 
+app.use(bodyParser.json());
 
-const graphqlHTTP = require('express-graphql');
-const { GraphQLSchema } = require("graphql");
+// Health check for AWS
+// NOTE: makes this smarter
+app.use("/graphql/test", function(req, res, next) {
+  res.setHeader("Access-Control-Allow-Origin", "*");
+  res.setHeader(
+    "Access-Control-Allow-Methods",
+    "GET, POST, OPTIONS, PUT, PATCH, DELETE"
+  );
+  res.setHeader(
+    "Access-Control-Allow-Headers",
+    "X-Requested-With, content-type, secret, token"
+  );
 
-const QueryRoot = require("./graphql/queries.js");
-const MutationRoot = require("./graphql/mutations.js");
-
-const port = process.env.Port || 8000;
-
-const cache = new NodeCache();
-const app = express();
-
-const schema = new GraphQLSchema({
-  // types: [],
-  query: QueryRoot,
-  // mutation: MutationRoot
+  res.sendStatus(200);
 });
-console.log('-----------------------------------')
-console.log('here')
-console.log('-----------------------------------')
 
-app.use('/graphql', graphqlHTTP({
-  schema,
-  graphiql: dev,
-}))
+// // The GraphQL endpoint
+app.use(
+  "/graphql",
+  (req, res, next) => {
+    res.setHeader("Access-Control-Allow-Origin", "*");
+    res.setHeader(
+      "Access-Control-Allow-Methods",
+      "GET, POST, OPTIONS, PUT, PATCH, DELETE"
+    );
+    res.setHeader(
+      "Access-Control-Allow-Headers",
+      "X-Requested-With, content-type, secret, token"
+    );
 
-app.use('/', (req, res) => {
-  res.json('Go to /graphql to test your queries and mutations!');
-})
+    if (req.method === "OPTIONS") {
+      res.sendStatus(200);
+    } else {
+      next();
+    }
+  },
+  graphqlHTTP( async request => ({
+    schema: await schema(request.headers),
+    graphiql: false
+  }))
+);
 
-app.use(bodyParser.json())
-app.use(bodyParser.urlencoded({ extended: false }))
+// GraphiQL, a visual editor for queries
+app.use(
+  "/graphiql",
+  (req, res, next) => {
+    res.setHeader("Access-Control-Allow-Origin", "*");
+    res.setHeader(
+      "Access-Control-Allow-Methods",
+      "GET, POST, OPTIONS, PUT, PATCH, DELETE"
+    );
+    res.setHeader(
+      "Access-Control-Allow-Headers",
+      "X-Requested-With, content-type, secret, token"
+    );
 
-app.listen(port, function() {
-  console.log('--------------------------------------------------');
-  console.log('When you sleep, I can hear you when you scream!!!!');
-  console.log('On port ', port);
-  console.log('--------------------------------------------------');
-})
+    if (req.method === "OPTIONS") {
+      res.sendStatus(200);
+    } else {
+      next();
+    }
+  },
+  graphqlHTTP( async request => ({
+    schema: await schema(request.headers),
+    graphiql: true
+  }))
+);
+
+app.listen(9005, () => {
+  console.log(
+    "Running a GraphQL API server at localhost:9005/graphql. \nUse localhost:9005/graphiql to run queries"
+  );
+});
